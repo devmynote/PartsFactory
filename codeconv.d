@@ -20,10 +20,10 @@ string toCodePage(string s, int codePage)
 {	// UTF8 → (codePage)
 	char[] ret;
 	wstring sw = s.to!wstring;
-	int len = WideCharToMultiByte(codePage, 0, sw.ptr, sw.length, null, 0, null, null);
+	int len = WideCharToMultiByte(codePage, 0, sw.ptr, cast(int)sw.length, null, 0, null, null);
 	if ( len > 0 ){
 		ret.length = len;
-		WideCharToMultiByte(codePage, 0, sw.ptr, sw.length, ret.ptr, len, null, null);
+		WideCharToMultiByte(codePage, 0, sw.ptr, cast(int)sw.length, ret.ptr, len, null, null);
 	}
 	return ( ret.to!string );
 }
@@ -31,10 +31,10 @@ string toCodePage(string s, int codePage)
 string fromCodePage(string s, int codePage)
 {	// (codePage) → UTF8
 	wstring ret;
-	int len = MultiByteToWideChar(codePage, 0, s.ptr, s.length, null, 0);
+	int len = MultiByteToWideChar(codePage, 0, s.ptr, cast(int)s.length, null, 0);
 	if ( len > 0 ){
 		ret.length = len;
-		MultiByteToWideChar(codePage, 0, s.ptr, s.length, cast(wchar*)ret.ptr, len);
+		MultiByteToWideChar(codePage, 0, s.ptr, cast(int)s.length, cast(wchar*)ret.ptr, len);
 	}
 	return ( ret.to!string );
 }
@@ -82,7 +82,7 @@ static class CP930TBL {
 		uint[wchar] cp930tbl;
 		foreach ( hi, line; CP930toUTF8.split("\n") ){
 			foreach ( lo, c; line ){
-				cp930tbl[c] = (hi << 8) + lo + 0x4040;
+				cp930tbl[c] = cast(uint)((hi << 8) + lo + 0x4040);
 			}
 		}
 		cp930tbl['　'] = 0x4040;
